@@ -1,5 +1,6 @@
 let videoElement=document.querySelector("video");
 let recordButton=document.querySelector("#record");
+let CapturePhoto=document.querySelector("#capture");
 let  recordingState=false;
 let mediaRecorder;
 
@@ -20,8 +21,16 @@ let mediaRecorder;
 
     let videoObj= new Blob([e.data],{type:"video/mp4"})
     console.log(videoObj);
+    let videoUrl=URL.createObjectURL(videoObj);
+  
+    let aTag=document.createElement("a");
 
-    
+    aTag.download=`Vidoe${Date.now()}.mp4`;
+    aTag.href=videoUrl;
+    aTag.click();
+
+
+
    };
    
    mediaRecorder.onstop=function(){
@@ -45,8 +54,24 @@ let mediaRecorder;
         recordingState=true;
     }
 
-   })
+   });
+
+   CapturePhoto.addEventListener("click",function(){
+    //canvas 
+    let canvas =document.createElement("canvas");
+    canvas.width = 640;   //video widht
+    canvas.height =480  // video height
 
 
+    let ctx =canvas.getContext("2d");
 
+    ctx.drawImage(videoElement,0,0);
+
+    //download canvas as an image 
+    let aTag =document.createElement("a");
+    aTag.download =`image${Date.now()}.jpg`;
+    aTag.href = canvas.toDataURL("image/jpg");
+    aTag.click();
+
+});
 })();
