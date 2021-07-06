@@ -11,6 +11,7 @@
     background: black;
 }
 
+
 video {
     height: 100%;
     width: 100%;
@@ -74,6 +75,31 @@ video {
     animation-iteration-count: 1;
 }
 
+.video-filters {
+    position: absolute;
+    top: 10vh;
+    /* border: 1px solid white; */
+    left: 10vh;
+    z-index: 3;
+}
+
+.filter {
+    height: 14vh;
+    width: 7vw;
+    /* background: aquamarine; */
+    /* border: 1px solid white; */
+    border: 1px solid white;
+    background-image: url("https://images.pexels.com/photos/2325446/pexels-photo-2325446.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+    background-size: cover;
+    background-blend-mode: soft-light;
+}
+
+.filter-div {
+    position: absolute;
+    top: 0px;
+    height: 100vh;
+    width: 100vw;
+}
 
 
 
