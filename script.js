@@ -30,15 +30,15 @@ let currentZoom=1;
         console.log("Inside on data available");
 
         let videoObj = new Blob([e.data], { type: "video/mp4" })
-        console.log(videoObj);
-        let videoUrl = URL.createObjectURL(videoObj);
+        // console.log(videoObj);
+        // let videoUrl = URL.createObjectURL(videoObj);
 
-        let aTag = document.createElement("a");
+        // let aTag = document.createElement("a");
 
-        aTag.download = `Vidoe${Date.now()}.mp4`;
-        aTag.href = videoUrl;
-        aTag.click();
-
+        // aTag.download = `Vidoe${Date.now()}.mp4`;
+        // aTag.href = videoUrl;
+        // aTag.click();
+        addmedia(videoObj,"video");
 
 
     };
@@ -49,56 +49,9 @@ let currentZoom=1;
 
     }
 
-    recordButton.addEventListener("click", function () {
+    recordButton.addEventListener("click", RecordingOnClick);
 
-        if (recordingState) {
-            mediaRecorder.stop();
-
-            recordingState = false;
-            recordButton.classList.remove("animate-record");
-        }
-        else {
-
-            mediaRecorder.start();
-
-            recordingState = true;
-            recordButton.classList.add("animate-record");
-
-        }
-
-    });
-
-    CapturePhoto.addEventListener("click", function () {
-
-        CapturePhoto.classList.add("animate-capture");
-
-        setTimeout(function () {
-            CapturePhoto.classList.remove("animate-capture");
-        }, 1000)
-
-        s 
-        let canvas = document.createElement("canvas");
-        canvas.width = 640;   
-        canvas.height = 480;  
-
-
-        let ctx = canvas.getContext("2d");
-
-        ctx.drawImage(videoElement, 0, 0);
-
-        if(filterSelected!="none"){
-
-            ctx.fillStyle=filterSelected;
-            ctx.fillRect(0,0,canvas.width,canvas.height);
-        }
-
-        //download canvas as an image 
-        let aTag = document.createElement("a");
-        aTag.download = `image${Date.now()}.jpg`;
-        aTag.href = canvas.toDataURL("image/jpg");
-        aTag.click();
-
-    });
+    CapturePhoto.addEventListener("click", CapturePhotoOnclick);
 })();
 
 
@@ -158,3 +111,85 @@ ZoomOut.addEventListener("click",function(){
     currentZoom = currentZoom-0.1;
      videoElement.style.transform= `scale(${currentZoom})`;
 });
+
+
+ function CapturePhotoOnclick () {
+
+    CapturePhoto.classList.add("animate-capture");
+
+    setTimeout(function () {
+        CapturePhoto.classList.remove("animate-capture");
+    }, 1000)
+
+    
+    let canvas = document.createElement("canvas");
+    canvas.width = 640;   
+    canvas.height = 480;  
+
+    
+
+    let ctx = canvas.getContext("2d");
+
+    if(currentZoom!=1){
+        ctx.translate(canvas.width/2,canvas.height/2);
+        ctx.scale(currentZoom,currentZoom);
+        ctx.translate(-canvas.width/2,-canvas.height/2);
+
+    }
+
+    ctx.drawImage(videoElement, 0, 0);
+
+    if(filterSelected!="none"){
+
+        ctx.fillStyle=filterSelected;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+    }
+
+    // //download canvas as an image 
+    // let aTag = document.createElement("a");
+    // aTag.download = `image${Date.now()}.jpg`;
+    // aTag.href = canvas.toDataURL("image/jpg");
+    // aTag.click();
+
+    let CanvasUrl=canvas.toDataURL("image.jpg");
+    addmedia(CanvasUrl,"photo");
+
+}
+
+function RecordingOnClick () {
+
+    if (recordingState) {
+        mediaRecorder.stop();
+
+        recordingState = false;
+        recordButton.classList.remove("animate-record");
+    }
+    else {
+
+        mediaRecorder.start();
+
+        recordingState = true;
+        recordButton.classList.add("animate-record");
+
+    }
+
+
+}
+
+function addmedia(MediaUrl,MediaType){
+
+          
+    let txnObj=db.transaction("Media","readwrite");
+    let MediaTable=txnObj.objectStore("Media");
+
+    MediaTable.add({mid: Date.now(),type:MediaType,url:MediaUrl});
+
+    txnObj.onerror=function(e){
+
+        console.log("transaction failed");
+        console.log(e);
+    }
+
+
+
+}
