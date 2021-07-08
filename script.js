@@ -5,7 +5,12 @@ let CapturePhoto = document.querySelector(".inner-capture");
 let filters=document.querySelectorAll(".filter");
 let ZoomIn=document.querySelector(".zoomIn");
 let ZoomOut=document.querySelector(".zoomOut");
+let galleryBtn=document.querySelector(".gallery-btn");
 
+galleryBtn.addEventListener("click",function(){
+
+    window.location.assign("Gallery.html");
+});
 
 let filterSelected="none";
 let recordingState = false;
@@ -14,6 +19,11 @@ let mediaRecorder;
 let minZoom=1;
 let maxZoom=3;
 let currentZoom=1;
+
+
+
+
+
 
 (async function () {
 

@@ -3,6 +3,7 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
+    /* overflow: auto; */
 }
 
 .video-container {
@@ -119,7 +120,14 @@ video {
     font-size: 1.5rem;
     color: white;
 }
-
+.gallery-btn {
+    background: black;
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid white;
+}
 
 
 @keyframes scaleInScaleOut {
